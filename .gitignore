@@ -1,0 +1,28 @@
+# Node.js dependencies
+frontend/node_modules/
+
+# Python virtual environment
+backend/venv/
+
+# Python cache files
+backend/__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build output
+frontend/build/
+
+# Environment variables
+.env
+
+# Kubernetes config
+*.yaml
+
+# Ignore IDE settings
+.vscode/
