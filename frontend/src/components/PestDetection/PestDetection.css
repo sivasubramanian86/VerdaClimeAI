@@ -1,0 +1,25 @@
+.pest-detection {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.pest-detection h2 {
+    color: #333;
+}
+
+.pest-detection ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.pest-detection li {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.pest-detection li strong {
+    color: #d9534f;
+}

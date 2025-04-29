@@ -1,15 +1,13 @@
 /* RealTimeVisualization Component Styling */
 .real-time-visualization {
-  margin: 20px auto;
+  flex: 2; /* Make the card larger */
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
+  background-color: #ffffff;
+  border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  text-align: center;
+  transition: transform 0.2s;
 }
 
-.real-time-visualization h2 {
-  margin-bottom: 20px;
-  color: #2c3e50;
+.real-time-visualization:hover {
+  transform: scale(1.05);
 }

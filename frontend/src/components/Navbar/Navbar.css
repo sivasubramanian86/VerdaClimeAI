@@ -1,28 +1,10 @@
-/* Navbar Component Styling */
+/* Navbar.css */
+
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #2ecc71;
+  background-color: green;
   color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
+  padding: 5px; /* Reduced thickness */
+  text-align: center;
+  font-size: 1.5em;
   font-weight: bold;
-}
-
-.navbar-menu {
-  display: flex;
-  align-items: center;
-}
-
-.language-selector {
-  padding: 5px;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
 }

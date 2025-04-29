@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './WeatherCard.css';
 
 function WeatherCard() {
+  const { t } = useTranslation();
+
   const [weatherData, setWeatherData] = useState({
     temperature: '--',
     rainfall: '--',
     wind: '--',
+    soilMoisture: '--',
+    hailstorm: '--',
   });
 
   useEffect(() => {
@@ -17,6 +22,8 @@ function WeatherCard() {
           temperature: data.temperature || '--',
           rainfall: data.rainfall || '--',
           wind: data.wind || '--',
+          soilMoisture: data.soilMoisture || '--',
+          hailstorm: data.hailstorm || '--',
         });
       })
       .catch((error) => console.error('Error fetching weather data:', error));
@@ -24,10 +31,12 @@ function WeatherCard() {
 
   return (
     <div className="weather-card">
-      <h3>Weather Data</h3>
-      <p>Temperature: {weatherData.temperature} °C</p>
-      <p>Rainfall: {weatherData.rainfall} mm</p>
-      <p>Wind: {weatherData.wind} km/h</p>
+      <h3>{t('weather')}</h3>
+      <p>{t('temperature')}: {weatherData.temperature} °C</p>
+      <p>{t('rainfall')}: {weatherData.rainfall} mm</p>
+      <p>{t('wind')}: {weatherData.wind} km/h</p>
+      <p>{t('soilMoisture')}: {weatherData.soilMoisture} %</p>
+      <p>{t('hailstorm')}: {weatherData.hailstorm}</p>
     </div>
   );
 }

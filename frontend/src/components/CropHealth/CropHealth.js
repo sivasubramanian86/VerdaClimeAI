@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import './CropHealth.css';
+import { useTranslation } from 'react-i18next'; // Add this import
 
 function CropHealth() {
-  const [alerts, setAlerts] = useState([]);
+  const { t } = useTranslation();
+  const [cropHealthData, setCropHealthData] = useState([]);
 
   useEffect(() => {
-    // Fetch AI-generated crop health alerts from the backend
+    // Fetch crop health data from the backend
     fetch('http://localhost:5000/crop-health')
       .then((response) => response.json())
-      .then((data) => setAlerts(data.alerts || []))
-      .catch((error) => console.error('Error fetching crop health alerts:', error));
+      .then((data) => {
+        setCropHealthData(data.alerts || []);
+      })
+      .catch((error) => console.error('Error fetching crop health data:', error));
   }, []);
 
   return (
     <div className="crop-health">
-      <h3>Crop Health Alerts</h3>
-      {alerts.length > 0 ? (
+      <h2>{t('cropHealth')}</h2>
+      {cropHealthData.length > 0 ? (
         <ul>
-          {alerts.map((alert, index) => (
+          {cropHealthData.map((alert, index) => (
             <li key={index}>{alert}</li>
           ))}
         </ul>
       ) : (
-        <p>No alerts at the moment.</p>
+        <p>{t('cropHealth')} data will be displayed here.</p>
       )}
     </div>
   );

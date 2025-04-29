@@ -1,28 +1,21 @@
-import React, { useState } from 'react';
-import './Navbar.css';
+import { useTranslation } from 'react-i18next';
 
 function Navbar() {
-  const [language, setLanguage] = useState('en');
+  const { t, i18n } = useTranslation();
 
-  const handleLanguageChange = (e) => {
-    setLanguage(e.target.value);
-    // Add logic to update the app's language dynamically
-    console.log(`Language changed to: ${e.target.value}`);
+  const handleLanguageChange = (event) => {
+    const selectedLanguage = event.target.value;
+    i18n.changeLanguage(selectedLanguage); // Change the language dynamically
   };
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">VerdaClime AI</div>
+      <div className="navbar-brand">{t('welcome')}</div>
       <div className="navbar-menu">
-        <select
-          className="language-selector"
-          value={language}
-          onChange={handleLanguageChange}
-        >
+        <select className="language-selector" onChange={handleLanguageChange} defaultValue={i18n.language}>
           <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-          <option value="hi">हिंदी</option>
+          <option value="hi">Hindi</option>
+          {/* Add more language options here */}
         </select>
       </div>
     </nav>
