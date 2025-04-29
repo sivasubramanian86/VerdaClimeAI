@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "i18next": "^25.0.2",
-    "react-i18next": "^15.5.1",
-    "typescript": "^4.9.5"
-  }
-}
