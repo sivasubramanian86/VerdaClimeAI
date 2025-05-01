@@ -5,6 +5,8 @@ import RealTimeVisualization from './components/RealTimeVisualization/RealTimeVi
 import WeatherCard from './components/WeatherCard/WeatherCard';
 import PestDetection from './components/PestDetection/PestDetection';
 import './styles/App.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -30,12 +32,26 @@ function App() {
     console.log({ query, language, district, cropType });
   };
 
-  const [data, setData] = useState({
-    weather: {},
-    cropHealth: {},
+  const dummyData = {
+    weather: {
+      temperature: { currentValue: 25, units: '°C', dataSource: 'Dummy' },
+      rainfall: { currentValue: 10, units: 'mm', dataSource: 'Dummy' },
+      windSpeed: { currentValue: 5, units: 'km/h', dataSource: 'Dummy' },
+    },
+    cropHealth: {
+      currentCropCondition: 'Healthy',
+      yieldPrediction: { predictedValue: 80, units: 'kg/ha', confidence: 90 },
+      cropManagementRecommendations: [
+        { recommendationId: 1, recommendation: 'Irrigate fields', severity: 'Low' },
+      ],
+    },
     visualization: {},
-    pestDetection: {},
-  });
+    pestDetection: {
+      pestIncidence: { currentPestRatio: 0.1, threshold: 0.2, dataSource: 'Dummy' },
+    },
+  };
+
+  const [data, setData] = useState(dummyData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -51,7 +67,7 @@ function App() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            input: 'Fetch all data for the dashboard in Ahmedabad by gathering comprehensive, real-time and historical agricultural information. The response must be a valid, structured JSON object with clearly defined sections: include a \'weather\' key that contains detailed real-time metrics for temperature, rainfall, hailstorm alerts, soil moisture levels, and wind speed; include a \'cropHealth\' key holding current crop condition data, yield predictions, growth stage indicators, and recommendations for crop management; include a \'visualisation\' key with properly formatted data arrays or objects that can be rendered as charts or graphs (e.g., historical trends, current thresholds, or real-time updates) suitable for data visualization components; and include a \'pestDetection\' key that describes pest incidence data, detection confidence, occurrence rates, and any alerts for potential pest threats. Additionally, embed a \'recommendations\' section where the LLM can include high-level insights or actionable strategies based on the input data, ensuring that each section is clearly demarcated for ease of parsing in the backend. Make sure the response is structured in a way that each key\'s value is a self-contained object or array, so that the frontend components can directly consume the corresponding sections without further transformation',
+            input: 'Fetch all data for the dashboard.',
             district,
             crop: cropType,
           }),
@@ -62,8 +78,6 @@ function App() {
         }
 
         const result = await response.json();
-        console.log('API Response:', result); // Debugging log
-
         setData({
           weather: result.weather || {},
           cropHealth: result.cropHealth || {},
@@ -71,8 +85,9 @@ function App() {
           pestDetection: result.pestDetection || {},
         });
       } catch (err) {
-        console.error('Error fetching data:', err); // Debugging log
-        setError(err.message);
+        console.error('Error fetching data:', err);
+        // Keep the existing data (dummy or previously fetched) in case of an error
+        setError('Failed to fetch updated data. Displaying existing data.');
       } finally {
         setIsLoading(false);
       }
@@ -88,20 +103,23 @@ function App() {
         <h1>Welcome to VerdaClimeAI</h1>
       </header>
       {isLoading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <CircularProgress />
+        </Box>
       ) : (
-        <div className="dashboard">
-          <div className="dashboard-row">
-            <WeatherCard data={data.weather} />
-            <CropHealth data={data.cropHealth} />
+        <>
+          {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+          <div className="dashboard">
+            <div className="dashboard-row">
+              <WeatherCard data={data.weather} />
+              <CropHealth data={data.cropHealth} />
+            </div>
+            <div className="dashboard-row">
+              <RealTimeVisualization data={data.visualization} />
+              <PestDetection data={data.pestDetection} />
+            </div>
           </div>
-          <div className="dashboard-row">
-            <RealTimeVisualization data={data.visualization} />
-            <PestDetection data={data.pestDetection} />
-          </div>
-        </div>
+        </>
       )}
       <div className="chat-box">
         <h2>Crop Query Chat</h2>

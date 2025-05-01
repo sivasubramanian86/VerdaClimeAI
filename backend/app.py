@@ -237,11 +237,14 @@ def interact_with_mistral():
                 # Log the raw response content for debugging
                 print("Raw Response Content:", response.text)
 
-                # Attempt to fix and parse the JSON content
+                # Validate and debug the JSON content
                 try:
                     clean_content = clean_content.strip()
-                    # Fix common JSON issues like unescaped quotes or trailing commas
+                    # Replace problematic characters and ensure valid JSON
                     clean_content = clean_content.replace('\n', '').replace('\t', '').replace('\\', '\\\\')
+                    clean_content = clean_content.replace('\"', '"')  # Fix escaped quotes
+                    # Debugging: Log the cleaned content before parsing
+                    print("Cleaned Content Before Parsing:", clean_content)
                     extracted_data = json.loads(clean_content)
                 except json.JSONDecodeError as e:
                     print("JSON Decode Error:", e)
