@@ -26,3 +26,4 @@ frontend/build/
 
 # Ignore IDE settings
 .vscode/
+.vercel

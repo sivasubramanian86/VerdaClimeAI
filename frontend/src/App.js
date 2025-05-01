@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import CropHealth from './components/CropHealth/CropHealth';
 import RealTimeVisualization from './components/RealTimeVisualization/RealTimeVisualization';
@@ -9,8 +9,8 @@ import './styles/App.css';
 function App() {
   const [query, setQuery] = useState('');
   const [language, setLanguage] = useState('English');
-  const [district, setDistrict] = useState('');
-  const [cropType, setCropType] = useState('');
+  const [district, setDistrict] = useState('Ahmedabad'); // Default district
+  const [cropType, setCropType] = useState('Rice'); // Default crop type
 
   const handleQueryChange = (e) => setQuery(e.target.value);
   const handleLanguageChange = (e) => setLanguage(e.target.value);
@@ -30,22 +30,79 @@ function App() {
     console.log({ query, language, district, cropType });
   };
 
+  const [data, setData] = useState({
+    weather: {},
+    cropHealth: {},
+    visualization: {},
+    pestDetection: {},
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch('http://localhost:5000/api/mistral', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            input: 'Fetch all data for the dashboard in Ahmedabad by gathering comprehensive, real-time and historical agricultural information. The response must be a valid, structured JSON object with clearly defined sections: include a \'weather\' key that contains detailed real-time metrics for temperature, rainfall, hailstorm alerts, soil moisture levels, and wind speed; include a \'cropHealth\' key holding current crop condition data, yield predictions, growth stage indicators, and recommendations for crop management; include a \'visualisation\' key with properly formatted data arrays or objects that can be rendered as charts or graphs (e.g., historical trends, current thresholds, or real-time updates) suitable for data visualization components; and include a \'pestDetection\' key that describes pest incidence data, detection confidence, occurrence rates, and any alerts for potential pest threats. Additionally, embed a \'recommendations\' section where the LLM can include high-level insights or actionable strategies based on the input data, ensuring that each section is clearly demarcated for ease of parsing in the backend. Make sure the response is structured in a way that each key\'s value is a self-contained object or array, so that the frontend components can directly consume the corresponding sections without further transformation',
+            district,
+            crop: cropType,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        console.log('API Response:', result); // Debugging log
+
+        setData({
+          weather: result.weather || {},
+          cropHealth: result.cropHealth || {},
+          visualization: result.visualisation || {},
+          pestDetection: result.pestDetection || {},
+        });
+      } catch (err) {
+        console.error('Error fetching data:', err); // Debugging log
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [district, cropType]);
+
   return (
     <div className="App">
       <Navbar language={language} onLanguageChange={handleLanguageChange} />
       <header className="App-header">
         <h1>Welcome to VerdaClimeAI</h1>
       </header>
-      <div className="dashboard">
-        <div className="dashboard-row">
-          <WeatherCard />
-          <CropHealth />
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : (
+        <div className="dashboard">
+          <div className="dashboard-row">
+            <WeatherCard data={data.weather} />
+            <CropHealth data={data.cropHealth} />
+          </div>
+          <div className="dashboard-row">
+            <RealTimeVisualization data={data.visualization} />
+            <PestDetection data={data.pestDetection} />
+          </div>
         </div>
-        <div className="dashboard-row">
-          <RealTimeVisualization />
-          <PestDetection />
-        </div>
-      </div>
+      )}
       <div className="chat-box">
         <h2>Crop Query Chat</h2>
         <textarea

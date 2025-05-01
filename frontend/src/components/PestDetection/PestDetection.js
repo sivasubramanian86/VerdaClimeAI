@@ -1,34 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next'; // Add this import
+import React from 'react';
+import './PestDetection.css';
 
-function PestDetection() {
-  const { t } = useTranslation();
-  const [pestData, setPestData] = useState([]);
+function PestDetection({ data }) {
+  if (!data) return <p>No pest detection data available.</p>;
 
-  useEffect(() => {
-    // Fetch pest detection data from the backend
-    fetch('http://localhost:5000/api/pest-detection')
-      .then((response) => response.json())
-      .then((data) => {
-        setPestData(data || []);
-      })
-      .catch((error) => console.error('Error fetching pest detection data:', error));
-  }, []);
+  const { pestIncidence } = data;
 
   return (
     <div className="pest-detection">
-      <h2>{t('pestDetection')}</h2>
-      {pestData.length > 0 ? (
-        <ul>
-          {pestData.map((pest, index) => (
-            <li key={index}>
-              {pest.name}: {pest.riskLevel}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>{t('pestDetection')} data will be displayed here.</p>
-      )}
+      <h2>Pest Detection</h2>
+      <p>Pest Ratio: {pestIncidence?.currentPestRatio}</p>
+      <p>Threshold: {pestIncidence?.threshold}</p>
+      <p>Detection Confidence: {pestIncidence?.detectionConfidence}%</p>
+      <p>Pest Type: {pestIncidence?.pestType}</p>
+      <h3>Alerts:</h3>
+      <ul>
+        {pestIncidence?.alerts?.map((alert, index) => (
+          <li key={index}>{alert}</li>
+        ))}
+      </ul>
     </div>
   );
 }

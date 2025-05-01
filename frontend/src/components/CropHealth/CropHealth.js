@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next'; // Add this import
+import React from 'react';
+import './CropHealth.css';
 
-function CropHealth() {
-  const { t } = useTranslation();
-  const [cropHealthData, setCropHealthData] = useState([]);
+function CropHealth({ data }) {
+  if (!data) return <p>No crop health data available.</p>;
 
-  useEffect(() => {
-    // Fetch crop health data from the backend
-    fetch('http://localhost:5000/crop-health')
-      .then((response) => response.json())
-      .then((data) => {
-        setCropHealthData(data.alerts || []);
-      })
-      .catch((error) => console.error('Error fetching crop health data:', error));
-  }, []);
+  const { currentCropCondition, yieldPrediction, cropManagementRecommendations } = data;
 
   return (
     <div className="crop-health">
-      <h2>{t('cropHealth')}</h2>
-      {cropHealthData.length > 0 ? (
-        <ul>
-          {cropHealthData.map((alert, index) => (
-            <li key={index}>{alert}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>{t('cropHealth')} data will be displayed here.</p>
-      )}
+      <h2>Crop Health</h2>
+      <p>Current Condition: {currentCropCondition}</p>
+      <p>Yield Prediction: {yieldPrediction?.predictedValue} {yieldPrediction?.units} (Confidence: {yieldPrediction?.confidence}%)</p>
+      <h3>Management Recommendations:</h3>
+      <ul>
+        {cropManagementRecommendations?.map((rec, index) => (
+          <li key={index}>
+            <strong>Recommendation:</strong> {rec.recommendation} <br />
+            <strong>ID:</strong> {rec.recommendationId} <br />
+            <strong>Severity:</strong> {rec.severity}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

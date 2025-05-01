@@ -1,42 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
 import './WeatherCard.css';
 
-function WeatherCard() {
-  const { t } = useTranslation();
+function WeatherCard({ data }) {
+  if (!data) return <p>No weather data available.</p>;
 
-  const [weatherData, setWeatherData] = useState({
-    temperature: '--',
-    rainfall: '--',
-    wind: '--',
-    soilMoisture: '--',
-    hailstorm: '--',
-  });
-
-  useEffect(() => {
-    // Fetch real-time weather data from the backend
-    fetch('http://localhost:5000/weather')
-      .then((response) => response.json())
-      .then((data) => {
-        setWeatherData({
-          temperature: data.temperature || '--',
-          rainfall: data.rainfall || '--',
-          wind: data.wind || '--',
-          soilMoisture: data.soilMoisture || '--',
-          hailstorm: data.hailstorm || '--',
-        });
-      })
-      .catch((error) => console.error('Error fetching weather data:', error));
-  }, []);
+  const { temperature, rainfall, hailstormAlerts, soilMoisture, windSpeed } = data;
 
   return (
     <div className="weather-card">
-      <h3>{t('weather')}</h3>
-      <p>{t('temperature')}: {weatherData.temperature} °C</p>
-      <p>{t('rainfall')}: {weatherData.rainfall} mm</p>
-      <p>{t('wind')}: {weatherData.wind} km/h</p>
-      <p>{t('soilMoisture')}: {weatherData.soilMoisture} %</p>
-      <p>{t('hailstorm')}: {weatherData.hailstorm}</p>
+      <h2>Weather Information</h2>
+      <p>Temperature: {temperature?.currentValue} {temperature?.units} (Source: {temperature?.dataSource})</p>
+      <p>Rainfall: {rainfall?.currentValue} {rainfall?.units}</p>
+      <p>Hailstorm Alerts: {hailstormAlerts?.currentAlerts || 'None'}</p>
+      <p>Soil Moisture: {soilMoisture?.currentLevel} {soilMoisture?.units}</p>
+      <p>Wind Speed: {windSpeed?.currentValue} {windSpeed?.units}</p>
     </div>
   );
 }
