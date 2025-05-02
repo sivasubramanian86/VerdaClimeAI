@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.log
+tests/
+Dockerfile
+k8s-backend.yaml
+*.md

@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ],
+  "env": {
+    "E2E_API_URL": "https://infer.e2enetworks.net/project/p-5553/endpoint/is-4831/v1/chat/completions",
+    "E2E_API_TOKEN": "your-api-token",
+    "LLM_API_KEY": "your-llm-api-key"
+  }
+}

@@ -27,13 +27,16 @@ CORS(app)
 #mistral_model = AutoModelForCausalLM.from_pretrained(mistral_model_name)
 #mistral_tokenizer = AutoTokenizer.from_pretrained(mistral_model_name)
 
+# Use environment variables for the base URL
+BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000')
+
 @app.route('/weather', methods=['GET'])
 def get_weather():
     """Return weather data using Mistral or fallback to dummy data."""
     try:
         # Fetch data from Mistral endpoint
         response = requests.post(
-            "http://localhost:5000/api/mistral",
+            f"{BASE_URL}/api/mistral",
             json={"input": "Provide weather data for crop management."}
         )
         if response.status_code == 200:
@@ -54,9 +57,8 @@ def get_weather():
 def get_crop_health():
     """Return crop health alerts using Mistral or fallback to dummy data."""
     try:
-        # Fetch data from Mistral endpoint
         response = requests.post(
-            "http://localhost:5000/api/mistral",
+            f"{BASE_URL}/api/mistral",
             json={"input": "Provide crop health alerts for farmers."}
         )
         if response.status_code == 200:
@@ -64,7 +66,6 @@ def get_crop_health():
     except Exception as e:
         print(f"Error fetching crop health data from Mistral: {e}")
 
-    # Fallback to dummy data
     return jsonify({
         'alerts': [
             'Hailstorm expected in northern regions affecting wheat.',
@@ -83,9 +84,8 @@ def get_advisory():
 def pest_detection():
     """Return pest detection data using Mistral or fallback to dummy data."""
     try:
-        # Fetch data from Mistral endpoint
         response = requests.post(
-            "http://localhost:5000/api/mistral",
+            f"{BASE_URL}/api/mistral",
             json={"input": "Provide pest detection data for crops."}
         )
         if response.status_code == 200:
@@ -93,7 +93,6 @@ def pest_detection():
     except Exception as e:
         print(f"Error fetching pest detection data from Mistral: {e}")
 
-    # Fallback to dummy data
     return jsonify([
         {"name": "Aphids", "riskLevel": "High"},
         {"name": "Whiteflies", "riskLevel": "Moderate"},
