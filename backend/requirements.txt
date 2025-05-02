@@ -1,2 +1,7 @@
 dotenv
 requests
+flask
+python-dotenv
+flask_cors
+transformers
+# Removed `json` as it is part of Python's standard library and does not need to be installed.

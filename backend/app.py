@@ -245,10 +245,13 @@ def interact_with_mistral():
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred"}), 500
 
-# Add a route to handle favicon.ico requests
+@app.route('/')
+def home():
+    return '<h1>🌱 VerdaClimeAI Backend is running! 🌦️</h1>'
+
 @app.route('/favicon.ico')
 def favicon():
-    return '', 404  # Return a 404 for favicon.ico requests
+    return '', 204  # Return a 204 No Content for favicon.ico requests
 
 if __name__ == '__main__':
     app.run(debug=True)

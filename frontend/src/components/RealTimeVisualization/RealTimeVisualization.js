@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import './RealTimeVisualization.css';
 import {
   Chart as ChartJS,
@@ -7,11 +7,14 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
 import { useTranslation } from 'react-i18next';
+import { Card, CardContent, Typography } from '@mui/material';
+import 'chart.js/auto';
 
 // Register Chart.js components
 ChartJS.register(
@@ -19,6 +22,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -31,35 +35,44 @@ function RealTimeVisualization({ data }) {
 
   const { temperatureTrend, rainfallTrend, soilMoistureLevel, windSpeedTrend } = data;
 
+  // Prepare data for the bar chart
   const chartData = {
-    labels: Array.isArray(temperatureTrend?.data) ? temperatureTrend.data.map((entry) => new Date(entry.timestamp).toLocaleDateString()) : [],
+    labels: ['Temperature', 'Rainfall', 'Soil Moisture', 'Wind Speed'],
     datasets: [
       {
-        label: t('temperatureTrend'),
-        data: Array.isArray(temperatureTrend?.data) ? temperatureTrend.data.map((entry) => entry.value) : [],
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
+        label: 'Real-Time Trends',
+        data: [
+          temperatureTrend?.currentValue || 0,
+          rainfallTrend?.currentValue || 0,
+          soilMoistureLevel?.currentValue || 0,
+          windSpeedTrend?.currentValue || 0,
+        ],
+        backgroundColor: [
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+        ],
+        borderColor: [
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(54, 162, 235, 1)',
+        ],
+        borderWidth: 1,
       },
     ],
   };
 
   return (
-    <div className="real-time-visualization">
-      <h2>{t('realTimeVisualization')}</h2>
-      <h3>{t('temperatureTrend')}</h3>
-      <p>{t('dataSource')}: {temperatureTrend?.dataSource}</p>
-      {chartData.labels.length > 0 ? (
-        <Line data={chartData} />
-      ) : (
-        <p>{t('realTimeVisualization')} data will be displayed here.</p>
-      )}
-      <h3>{t('rainfallTrend')}</h3>
-      <p>{t('dataSource')}: {rainfallTrend?.dataSource}</p>
-      <h3>{t('soilMoistureLevel')}</h3>
-      <p>{t('dataSource')}: {soilMoistureLevel?.dataSource}</p>
-      <h3>{t('windSpeedTrend')}</h3>
-      <p>{t('dataSource')}: {windSpeedTrend?.dataSource}</p>
-    </div>
+    <Card style={{ margin: '20px', padding: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
+      <CardContent>
+        <Typography variant="h5" component="div" gutterBottom>
+          {t('realTimeVisualization')}
+        </Typography>
+        <Bar data={chartData} />
+      </CardContent>
+    </Card>
   );
 }
 

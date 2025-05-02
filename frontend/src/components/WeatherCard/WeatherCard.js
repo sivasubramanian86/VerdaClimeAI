@@ -1,20 +1,50 @@
 import React from 'react';
+import { Card, CardContent, Typography } from '@mui/material';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto';
 import './WeatherCard.css';
 
 function WeatherCard({ data }) {
   if (!data) return <p>No weather data available.</p>;
 
-  const { temperature, rainfall, hailstormAlerts, soilMoisture, windSpeed } = data;
+  const { temperature, rainfall, windSpeed } = data;
+
+  // Prepare data for the line chart
+  const chartData = {
+    labels: ['Temperature', 'Rainfall', 'Wind Speed'],
+    datasets: [
+      {
+        label: 'Weather Metrics',
+        data: [
+          temperature?.currentValue || 0,
+          rainfall?.currentValue || 0,
+          windSpeed?.currentValue || 0,
+        ],
+        backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+        borderColor: ['rgba(75, 192, 192, 1)'],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
-    <div className="weather-card">
-      <h2>Weather Information</h2>
-      <p>Temperature: {temperature?.currentValue} {temperature?.units} (Source: {temperature?.dataSource})</p>
-      <p>Rainfall: {rainfall?.currentValue} {rainfall?.units}</p>
-      <p>Hailstorm Alerts: {hailstormAlerts?.currentAlerts || 'None'}</p>
-      <p>Soil Moisture: {soilMoisture?.currentLevel} {soilMoisture?.units}</p>
-      <p>Wind Speed: {windSpeed?.currentValue} {windSpeed?.units}</p>
-    </div>
+    <Card style={{ margin: '20px', padding: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
+      <CardContent>
+        <Typography variant="h5" component="div" gutterBottom>
+          Weather Overview
+        </Typography>
+        <Line data={chartData} />
+        <Typography variant="body2" color="text.secondary">
+          Temperature: {temperature?.currentValue} {temperature?.units}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Rainfall: {rainfall?.currentValue} {rainfall?.units}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Wind Speed: {windSpeed?.currentValue} {windSpeed?.units}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
 

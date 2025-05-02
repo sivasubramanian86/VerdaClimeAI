@@ -7,12 +7,21 @@ import PestDetection from './components/PestDetection/PestDetection';
 import './styles/App.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import i18n from './i18n';
+
+// Add Web Speech API for voice recognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = i18n.language === 'hi' ? 'hi-IN' : 'en-US'; // Default language, can be updated dynamically
+recognition.interimResults = false;
 
 function App() {
   const [query, setQuery] = useState('');
   const [language, setLanguage] = useState('English');
   const [district, setDistrict] = useState('Ahmedabad'); // Default district
   const [cropType, setCropType] = useState('Rice'); // Default crop type
+  const [transliteratedText, setTransliteratedText] = useState('');
+  const [voiceInput, setVoiceInput] = useState('');
 
   const handleQueryChange = (e) => setQuery(e.target.value);
   const handleLanguageChange = (e) => setLanguage(e.target.value);
@@ -21,15 +30,40 @@ function App() {
 
   const handleMicrophoneInput = () => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = language === 'Hindi' ? 'hi-IN' : 'en-IN'; // Add more language codes as needed
+    recognition.lang = language === 'Hindi' ? 'hi-IN' :
+                      language === 'Tamil' ? 'ta-IN' :
+                      language === 'Kannada' ? 'kn-IN' :
+                      language === 'Malayalam' ? 'ml-IN' :
+                      language === 'Telugu' ? 'te-IN' :
+                      'en-IN'; // Default to English
     recognition.onresult = (event) => {
       setQuery(event.results[0][0].transcript);
     };
     recognition.start();
   };
 
-  const handleSubmit = () => {
-    // Removed console.log for query, language, district, and cropType
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/llm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          input: query,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch response: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      setQuery(result.output || 'No response received');
+    } catch (error) {
+      console.error('Error fetching LLM response:', error);
+      setQuery('Error: Unable to fetch response from the backend.');
+    }
   };
 
   const dummyData = {
