@@ -9,10 +9,6 @@ import json
 # Load environment variables from a .env file
 load_dotenv()
 
-# Debugging: Print environment variables to verify loading
-print("E2E_API_URL:", os.getenv('E2E_API_URL'))
-print("E2E_API_TOKEN:", os.getenv('E2E_API_TOKEN'))
-
 app = Flask(__name__)
 # Enable CORS for the Flask app
 CORS(app)
@@ -42,7 +38,7 @@ def get_weather():
         if response.status_code == 200:
             return jsonify(response.json())
     except Exception as e:
-        print(f"Error fetching weather data from Mistral: {e}")
+        pass
 
     # Fallback to dummy data
     return jsonify({
@@ -64,7 +60,7 @@ def get_crop_health():
         if response.status_code == 200:
             return jsonify(response.json())
     except Exception as e:
-        print(f"Error fetching crop health data from Mistral: {e}")
+        pass
 
     return jsonify({
         'alerts': [
@@ -91,7 +87,7 @@ def pest_detection():
         if response.status_code == 200:
             return jsonify(response.json())
     except Exception as e:
-        print(f"Error fetching pest detection data from Mistral: {e}")
+        pass
 
     return jsonify([
         {"name": "Aphids", "riskLevel": "High"},
@@ -199,17 +195,9 @@ def interact_with_mistral():
         ]
     }
 
-    # Debugging: Log the refined prompt
-    print("Refined Prompt:", refined_prompt)
-
     # E2E Networks API details
     e2e_api_url = os.getenv('E2E_API_URL', 'https://api.e2enetworks.com/mistral')
     e2e_api_token = os.getenv('E2E_API_TOKEN', 'your-end-2-end-token')
-
-    # Debugging: Log the payload and API details
-    print("E2E_API_URL:", e2e_api_url)
-    print("E2E_API_TOKEN:", e2e_api_token)
-    print("Payload being sent to E2E API:", payload)
 
     try:
         # Make a request to the E2E Networks API
@@ -222,33 +210,21 @@ def interact_with_mistral():
             json=payload
         )
 
-        # Debugging: Log the response status and content
-        print("Response status code:", response.status_code)
-        print("Response content:", response.text)
-
         if response.status_code == 200:
             try:
                 raw_data = json.loads(response.text)  # Parse the response text into a JSON object
                 content_str = raw_data.get("choices", [{}])[0].get("message", {}).get("content", "")
                 clean_content = content_str.strip().replace('\n', '')
-                print("Clean Content:", clean_content)  # Debugging: Log the cleaned content
                 
-                # Log the raw response content for debugging
-                print("Raw Response Content:", response.text)
-
                 # Validate and debug the JSON content
                 try:
                     clean_content = clean_content.strip()
                     # Replace problematic characters and ensure valid JSON
                     clean_content = clean_content.replace('\n', '').replace('\t', '').replace('\\', '\\\\')
                     clean_content = clean_content.replace('\"', '"')  # Fix escaped quotes
-                    # Debugging: Log the cleaned content before parsing
-                    print("Cleaned Content Before Parsing:", clean_content)
                     extracted_data = json.loads(clean_content)
                 except json.JSONDecodeError as e:
-                    print("JSON Decode Error:", e)
                     return jsonify({"error": "Invalid JSON format in response"}), 500
-                print("Extracted Data:", extracted_data)  # Debugging: Log the extracted data
 
                 # Example: Extract and format relevant data
                 formatted_data = {
@@ -257,25 +233,22 @@ def interact_with_mistral():
                     "visualisation": extracted_data.get("visualisation", {}),
                     "pestDetection": extracted_data.get("pestDetection", {})
                 }
-                print("Formatted Data:", formatted_data)  # Debugging: Log the formatted data
                 return jsonify(formatted_data)
             except Exception as e:
-                print("Error processing response:", e)
                 return jsonify({"error": "Failed to process response"}), 500
 
-        # Log non-200 responses
-        print("Non-200 Response:", response.text)
         return jsonify({"error": "Failed to fetch data from Mistral API"}), response.status_code
 
     except requests.exceptions.RequestException as e:
-        # Log request exceptions
-        print("Request Exception:", e)
         return jsonify({"error": "Request to Mistral API failed"}), 500
 
     except Exception as e:
-        # Log unexpected exceptions
-        print("Unexpected Exception:", e)
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+# Add a route to handle favicon.ico requests
+@app.route('/favicon.ico')
+def favicon():
+    return '', 404  # Return a 404 for favicon.ico requests
 
 if __name__ == '__main__':
     app.run(debug=True)

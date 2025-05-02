@@ -29,7 +29,7 @@ function App() {
   };
 
   const handleSubmit = () => {
-    console.log({ query, language, district, cropType });
+    // Removed console.log for query, language, district, and cropType
   };
 
   const dummyData = {

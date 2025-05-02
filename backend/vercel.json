@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "app.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
     }
   ],
   "routes": [
@@ -15,6 +18,7 @@
   "env": {
     "E2E_API_URL": "https://infer.e2enetworks.net/project/p-5553/endpoint/is-4831/v1/chat/completions",
     "E2E_API_TOKEN": "your-api-token",
-    "LLM_API_KEY": "your-llm-api-key"
+    "LLM_API_KEY": "your-llm-api-key",
+    "BASE_URL": "https://verdaclimeai-backend.vercel.app"
   }
 }

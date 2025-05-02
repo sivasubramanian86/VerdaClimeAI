@@ -29,8 +29,6 @@ def preprocess_dataset(file_path, output_dir):
         writer.writeheader()
         writer.writerows(val_data)
 
-    print(f"Preprocessed data saved to {output_dir}")
-
 if __name__ == "__main__":
     # Example usage
     preprocess_dataset("example_dataset.csv", "processed_data")

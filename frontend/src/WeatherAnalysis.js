@@ -18,16 +18,12 @@ function WeatherAnalysis() {
     setWeatherData(null); // Reset weather data state
     setIsLoading(true); // Set loading to true before API call
 
-    console.log('Fetching weather analysis for crop:', cropType, 'and region:', region);
-
     try {
       // Make API POST request
       const response = await axios.post('http://localhost:5000/weather', {
         cropType,
         region,
       });
-
-      console.log('API Response for Weather Analysis:', response.data);
 
       // Update state with API response
       const details = response.data.details || {};
