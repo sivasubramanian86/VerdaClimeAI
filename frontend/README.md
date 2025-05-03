@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# VerdaClimeAI Frontend 🚀  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview  
+VerdaClimeAI is an AI-powered agricultural dashboard designed to assist extension workers in providing real-time insights to farmers. This frontend application includes **Weather, Crop Health, Real-Time Visualization, and Pest Detection** modules while integrating AI-powered recommendations and multilingual crop query support.  
 
-## Available Scripts
+## Features  
+✅ **Weather Module:** Displays real-time temperature, rainfall trends, soil moisture, wind speed, and hailstorm alerts.  
+✅ **Crop Health Module:** Provides crop condition insights, yield predictions, and tailored recommendations for rice and wheat.  
+✅ **Real-Time Visualization:** Interactive graphs for trend analysis and distribution insights.  
+✅ **Pest Detection Module:** AI-driven early pest warning system for proactive interventions.  
+✅ **Multi-Lingual Crop Query Chat:** Enables extension officers to use voice input in native languages for AI-powered recommendations.  
 
-In the project directory, you can run:
+## Tech Stack  
+🔹 **Frontend:** React, Material-UI/Tailwind CSS, Recharts/Chart.js  
+🔹 **State Management:** React Context API / Redux  
+🔹 **API Integration:** Communicates with backend AI models (Mistral LLM)  
+🔹 **Speech Recognition:** Google Speech-to-Text API for voice queries  
 
-### `npm start`
+## Setup & Installation  
+Ensure you have **Node.js** and **npm** installed before proceeding.  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1️⃣ **Clone the repository**  
+```sh
+git clone <YOUR_GITHUB_REPO_LINK>
+cd frontend
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2️⃣ **Install dependencies**  
+```sh
+npm install
+```
 
-### `npm test`
+3️⃣ **Run the development server**  
+```sh
+npm start
+```
+This will start the frontend locally at `http://localhost:3000`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Build & Deployment  
+📌 **Production Build:**  
+```sh
+npm run build
+```
+This generates the production-ready build in the `/build` directory.  
 
-### `npm run build`
+📌 **Deploying on Cloud (Example: Vercel):**  
+```sh
+npm install -g vercel
+vercel deploy
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Future Enhancements  
+🔜 **Mobile App Development:** Expand to React Native or Flutter for seamless farmer accessibility.  
+🔜 **Expanded Multi-Lingual Support:** AI-powered speech-to-text processing with dialect translation.  
+🔜 **Enhanced AI Predictions:** Scaling models to include disease forecasting and hyper-local weather adaptability.  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License  
+This project is licensed under [MIT License](LICENSE).
