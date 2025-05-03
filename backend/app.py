@@ -157,7 +157,7 @@ def interact_with_mistral():
 
     # Get user input from the request
     user_input = request.json.get('input', '')
-    district = request.json.get('district', 'Unknown District')
+    district = request.json.get('district', 'Bangalore')
 
     # Refine the input prompt for better results
     refined_prompt = refined_prompt = (
