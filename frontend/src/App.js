@@ -44,7 +44,7 @@ function App() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/llm`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/mistral`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,12 @@ function App() {
         { recommendationId: 1, recommendation: 'Irrigate fields', severity: 'Low' },
       ],
     },
-    visualization: {},
+    visualization: {
+      'Temperature': 0.8,
+      'Rainfall': 0.6,
+      'Soil Moisture': 0.9,
+      'Wind Speed': 0.7
+    },
     pestDetection: {
       pestIncidence: { currentPestRatio: 0.1, threshold: 0.2, dataSource: 'Dummy' },
     },
@@ -175,16 +180,6 @@ function App() {
             <option value="Punjabi">Punjabi</option>
             <option value="Kannada">Kannada</option>
             <option value="Malayalam">Malayalam</option>
-            <option value="Odia">Odia</option>
-            <option value="Assamese">Assamese</option>
-            <option value="Urdu">Urdu</option>
-            <option value="Sanskrit">Sanskrit</option>
-            <option value="Konkani">Konkani</option>
-            <option value="Maithili">Maithili</option>
-            <option value="Dogri">Dogri</option>
-            <option value="Santhali">Santhali</option>
-            <option value="Bodo">Bodo</option>
-            <option value="Kashmiri">Kashmiri</option>
           </select>
           <select value={district} onChange={handleDistrictChange} className="dropdown">
             <option value="">Select District</option>
@@ -196,6 +191,9 @@ function App() {
             <option value="Kolkata">Kolkata</option>
             <option value="Mumbai">Mumbai</option>
             <option value="Pune">Pune</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Punjab">Punjab</option>
             <option value="Lucknow">Lucknow</option>
             <option value="Jaipur">Jaipur</option>
             <option value="Patna">Patna</option>

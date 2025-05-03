@@ -29,36 +29,34 @@ ChartJS.register(
 );
 
 function RealTimeVisualization({ data }) {
+  console.log(data)
   const { t } = useTranslation();
+  
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <Card style={{ margin: '20px', padding: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
+        <CardContent>
+          <Typography variant="h5" component="div" gutterBottom>
+            {t('realTimeVisualization')}
+          </Typography>
+          <p>{t('noDataAvailable')}</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
-  if (!data) return <p>{t('noVisualizationDataAvailable')}</p>;
-
-  const { temperatureTrend, rainfallTrend, soilMoistureLevel, windSpeedTrend } = data;
-
-  // Prepare data for the bar chart
+  // Prepare data for the bar chart from LLM output
+  const llmCategories = Object.keys(data);
+  const llmScores = Object.values(data);
   const chartData = {
-    labels: ['Temperature', 'Rainfall', 'Soil Moisture', 'Wind Speed'],
+    labels: llmCategories,
     datasets: [
       {
-        label: 'Real-Time Trends',
-        data: [
-          temperatureTrend?.currentValue || 0,
-          rainfallTrend?.currentValue || 0,
-          soilMoistureLevel?.currentValue || 0,
-          windSpeedTrend?.currentValue || 0,
-        ],
-        backgroundColor: [
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-        ],
-        borderColor: [
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(54, 162, 235, 1)',
-        ],
+        label: 'LLM Analysis Scores',
+        data: llmScores,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+
         borderWidth: 1,
       },
     ],
