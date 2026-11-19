@@ -1,3 +1,8 @@
+> [!NOTE]
+> **OFFICIAL PORTFOLIO SHOWCASE BY SIVASUBRAMANIAN**  
+> **Original Author:** [Sivasubramanian](https://github.com/sivasubramanian86)  
+> *This repository is an open portfolio showcase. Unauthorized cloning, re-hosting, or submission to hackathons/competitions under another name is strictly prohibited.*
+
 # VerdaClimeAI
 
 VerdaClimeAI is a project designed to provide real-time visualization and analysis of climate and agricultural data. It consists of a backend for data processing and a frontend for user interaction.
